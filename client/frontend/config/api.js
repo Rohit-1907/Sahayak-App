@@ -6,7 +6,7 @@
  */
 
 // Base API URL - Django server
-export const API_BASE_URL = 'https://campaigns-persian-apply-marks.trycloudflare.com';
+export const API_BASE_URL = 'https://sahayak-app-production.up.railway.app';
 
 // API Endpoints
 export const API_ENDPOINTS = {

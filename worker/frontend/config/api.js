@@ -4,7 +4,7 @@
  */
 
 // Base URL - Update this when deploying
-export const BACKEND_URL = 'https://campaigns-persian-apply-marks.trycloudflare.com';
+export const BACKEND_URL = 'https://sahayak-app-production.up.railway.app';
 export const API_BASE_URL = `${BACKEND_URL}/api/v1`;
 
 // HTTP Methods
