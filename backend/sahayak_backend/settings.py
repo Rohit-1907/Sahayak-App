@@ -308,20 +308,28 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# Firebase credentials path
+# Firebase credentials path or raw JSON env
+import json
+FIREBASE_CREDENTIALS_JSON = env('FIREBASE_CREDENTIALS_JSON', default=None)
 FIREBASE_CREDENTIALS_PATH = env('FIREBASE_CREDENTIALS_PATH', 
     default=os.path.join(BASE_DIR, 'firebase-admin-key.json'))
 
 # Initialize Firebase Admin SDK
 NOTIFICATIONS_ENABLED = False
 try:
-    if os.path.exists(FIREBASE_CREDENTIALS_PATH):
+    if FIREBASE_CREDENTIALS_JSON:
+        cred_dict = json.loads(FIREBASE_CREDENTIALS_JSON)
+        cred = credentials.Certificate(cred_dict)
+        firebase_admin.initialize_app(cred)
+        NOTIFICATIONS_ENABLED = True
+        print("[OK] Firebase Admin SDK initialized successfully from FIREBASE_CREDENTIALS_JSON environment variable")
+    elif os.path.exists(FIREBASE_CREDENTIALS_PATH):
         cred = credentials.Certificate(FIREBASE_CREDENTIALS_PATH)
         firebase_admin.initialize_app(cred)
         NOTIFICATIONS_ENABLED = True
         print(f"[OK] Firebase Admin SDK initialized successfully from {FIREBASE_CREDENTIALS_PATH}")
     else:
-        print(f"[WARN]  Firebase credentials not found at {FIREBASE_CREDENTIALS_PATH}")
+        print(f"[WARN] Firebase credentials not found (checked FIREBASE_CREDENTIALS_JSON and {FIREBASE_CREDENTIALS_PATH})")
         print("FCM push notifications will be disabled")
 except Exception as e:
     print(f"[FAIL] Failed to initialize Firebase Admin SDK: {e}")
