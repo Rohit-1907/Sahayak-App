@@ -1,0 +1,68 @@
+{
+    "expo": {
+        "name": "SAHAYAK Worker",
+        "slug": "sahayak-worker",
+        "version": "1.0.0",
+        "scheme": "sahayak-worker",
+        "sdkVersion": "57.0.0",
+        "orientation": "portrait",
+        "icon": "./assets/icon.png",
+        "userInterfaceStyle": "light",
+        "newArchEnabled": false,
+        "splash": {
+            "image": "./assets/splash-icon.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#ffffff"
+        },
+        "ios": {
+            "supportsTablet": true,
+            "bundleIdentifier": "com.sahayak.worker",
+            "config": {
+                "googleMapsApiKey": "AIzaSyC7pA_4_cuuBw_dtRUjJ7tIAFXUeJ8hBIA"
+            }
+        },
+        "android": {
+            "adaptiveIcon": {
+                "foregroundImage": "./assets/adaptive-icon.png",
+                "backgroundColor": "#4E7DAB"
+            },
+            "package": "com.sahayak.worker",
+            "permissions": [
+                "android.permission.RECORD_AUDIO",
+                "android.permission.MODIFY_AUDIO_SETTINGS",
+                "android.permission.CAMERA",
+                "android.permission.ACCESS_FINE_LOCATION",
+                "android.permission.ACCESS_COARSE_LOCATION",
+                "android.permission.POST_NOTIFICATIONS"
+            ],
+            "config": {
+                "googleMaps": {
+                    "apiKey": "AIzaSyC7pA_4_cuuBw_dtRUjJ7tIAFXUeJ8hBIA"
+                }
+            },
+            "googleServicesFile": "./google-services.json"
+        },
+        "web": {
+            "favicon": "./assets/favicon.png"
+        },
+        "plugins": [
+            "expo-asset",
+            "expo-camera",
+            "@react-native-community/datetimepicker",
+            [
+                "expo-notifications",
+                {
+                    "icon": "./assets/icon.png",
+                    "color": "#FF6B35",
+                    "sounds": []
+                }
+            ],
+            [
+                "react-native-maps",
+                {
+                    "googleMapsApiKey": "AIzaSyC7pA_4_cuuBw_dtRUjJ7tIAFXUeJ8hBIA"
+                }
+            ]
+        ]
+    }
+}

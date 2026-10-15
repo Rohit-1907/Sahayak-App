@@ -1,0 +1,22 @@
+# Copy and paste these commands one by one
+
+# Step 1: Initialize git (if not done)
+cd d:\capstone
+git init
+
+# Step 2: Add all files
+git add .
+
+# Step 3: Commit
+git commit -m "Initial commit: OTP verification system complete"
+
+# Step 4: Create repo on GitHub.com, then run:
+# (Replace YOUR_USERNAME with your GitHub username)
+git remote add origin https://github.com/YOUR_USERNAME/sahayak-capstone.git
+
+# Step 5: Push to GitHub
+git branch -M main
+git push -u origin main
+
+# DONE! ✅
+# Share the GitHub link with your teammate!

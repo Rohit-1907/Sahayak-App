@@ -1,0 +1,71 @@
+{
+    "expo": {
+        "name": "SAHAYAK Client",
+        "slug": "sahayak-client",
+        "version": "1.0.0",
+        "scheme": "sahayak-client",
+        "sdkVersion": "57.0.0",
+        "orientation": "portrait",
+        "icon": "./assets/icon.png",
+        "userInterfaceStyle": "light",
+        "newArchEnabled": false,
+        "splash": {
+            "image": "./assets/splash-icon.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#ffffff"
+        },
+        "ios": {
+            "supportsTablet": true,
+            "bundleIdentifier": "com.sahayak.client",
+            "config": {
+                "googleMapsApiKey": "AIzaSyC7pA_4_cuuBw_dtRUjJ7tIAFXUeJ8hBIA"
+            }
+        },
+        "android": {
+            "adaptiveIcon": {
+                "foregroundImage": "./assets/adaptive-icon.png",
+                "backgroundColor": "#4E7DAB"
+            },
+            "edgeToEdgeEnabled": true,
+            "package": "com.sahayak.client",
+            "googleServicesFile": "./google-services.json",
+            "permissions": [
+                "android.permission.POST_NOTIFICATIONS",
+                "android.permission.ACCESS_FINE_LOCATION",
+                "android.permission.ACCESS_COARSE_LOCATION"
+            ],
+            "config": {
+                "googleMaps": {
+                    "apiKey": "AIzaSyC7pA_4_cuuBw_dtRUjJ7tIAFXUeJ8hBIA"
+                }
+            }
+        },
+        "web": {
+            "favicon": "./assets/favicon.png"
+        },
+        "plugins": [
+            "expo-asset",
+            "@react-native-community/datetimepicker",
+            [
+                "expo-notifications",
+                {
+                    "icon": "./assets/icon.png",
+                    "color": "#FF6B35",
+                    "sounds": []
+                }
+            ],
+            [
+                "react-native-maps",
+                {
+                    "googleMapsApiKey": "AIzaSyC7pA_4_cuuBw_dtRUjJ7tIAFXUeJ8hBIA"
+                }
+            ],
+            "expo-speech-recognition"
+        ],
+        "extra": {
+            "eas": {
+                "projectId": "sahayak-client-fcm-2024"
+            }
+        }
+    }
+}

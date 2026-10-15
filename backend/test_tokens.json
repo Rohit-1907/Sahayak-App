@@ -1,0 +1,15 @@
+{
+    "refresh":  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc4NzkzNjA0MywiaWF0IjoxNzg3MzMxMjQzLCJqdGkiOiJjMDI4ZWY2NTk1ZjA0MjM1OGIxZmVjYWViYzQ4ZDY1MiIsInVzZXJfaWQiOiJhMzJmZTlmZC05Y2U3LTQ0YTUtODNkNC1hZDI0NTJiYzkyM2MiLCJ1c2VybmFtZSI6InRlc3RjdXN0b21lcjIiLCJyb2xlIjoiY3VzdG9tZXIiLCJwaG9uZV9udW1iZXIiOiIxMjM0NTY3ODkxIiwiaXNfdmVyaWZpZWQiOmZhbHNlfQ.cQybgvFkrK7-wFJ5OFD6oZAqufi_2V-mpnlRAYl88IY",
+    "access":  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg3NDE3NjQzLCJpYXQiOjE3ODczMzEyNDQsImp0aSI6IjQ1MWFiOWM4NmI5MjRkZGJiNmY3NzNiMjg3MzRiODFlIiwidXNlcl9pZCI6ImEzMmZlOWZkLTljZTctNDRhNS04M2Q0LWFkMjQ1MmJjOTIzYyIsInVzZXJuYW1lIjoidGVzdGN1c3RvbWVyMiIsInJvbGUiOiJjdXN0b21lciIsInBob25lX251bWJlciI6IjEyMzQ1Njc4OTEiLCJpc192ZXJpZmllZCI6ZmFsc2V9.JNh68tKmOQjwkxJKtI2fY8ZP7S-TrOmyI5OAdGnPSJ0",
+    "user":  {
+                 "id":  "a32fe9fd-9ce7-44a5-83d4-ad2452bc923c",
+                 "username":  "testcustomer2",
+                 "email":  "test2@example.com",
+                 "phone_number":  "1234567891",
+                 "full_name":  "Test User",
+                 "role":  "customer",
+                 "role_display":  "Customer",
+                 "is_verified":  false,
+                 "profile_picture":  null
+             }
+}

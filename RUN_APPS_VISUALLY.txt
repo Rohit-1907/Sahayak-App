@@ -1,0 +1,398 @@
+================================================================================
+                    HOW TO RUN SAHAYAK APPS - VISUAL GUIDE
+================================================================================
+
+BOTH APPS ARE READY TO RUN RIGHT NOW! ✅
+
+They already have:
+  ✓ Full UI code
+  ✓ Navigation screens
+  ✓ User interface
+  ✓ Sample data
+  ✓ No compilation errors needed
+
+================================================================================
+                              QUICK VISUAL GUIDE
+================================================================================
+
+Step 1: Setup Tools (One time - 5 minutes)
+─────────────────────────────────────────────────────────────────────────────
+
+  1. Download & Install Node.js from nodejs.org
+     ↓
+  2. Open PowerShell/Command Prompt
+     ↓
+  3. Run: npm install -g expo-cli
+     ↓
+  4. Download "Expo Go" app from Google Play Store on Android device
+     
+                              ✅ READY!
+
+================================================================================
+                         CLIENT APP - STEP BY STEP
+================================================================================
+
+STEP 1: Open PowerShell/Command Prompt
+
+  Open PowerShell → Type:
+  cd d:\capstone\client\frontend
+
+
+STEP 2: Install Dependencies
+
+  Type:
+  npm install
+
+  ⏳ Wait 3-5 minutes... (downloads ~500MB)
+  
+  You should see green ✓ marks at the end
+
+
+STEP 3: Start the App
+
+  Type:
+  npm start
+
+  ✨ You'll see:
+
+    ┌─────────────────────────────────────────┐
+    │  Expo Go Configuration is set up!       │
+    │  Tunnel ready                           │
+    │  Metro bundler started                  │
+    │                                         │
+    │  exp://192.168.0.100:8081              │
+    │                                         │
+    │  [QR CODE SHOWN HERE]                  │
+    │                                         │
+    │  Press i - open iOS                    │
+    │  Press a - open Android                │
+    │  Press w - open Web                    │
+    │  Press r - reload                      │
+    │  Press q - exit                        │
+    └─────────────────────────────────────────┘
+
+
+STEP 4: Open on Your Device
+
+  Option A: Scan QR Code (Recommended)
+  ────────────────────────────────────
+  
+    1. On Android device, open "Expo Go" app
+    2. Tap camera icon (top right)
+    3. Point phone camera at QR code in terminal
+    4. App opens in 10-30 seconds! 🎉
+    
+    
+  Option B: Paste URL
+  ──────────────────
+  
+    1. Copy: exp://192.168.0.100:8081
+    2. Open Expo Go → Paste link
+    3. App opens
+
+
+STEP 5: You're Running Client App! ✅
+
+  You should see:
+  
+    ┌────────────────────────────────────┐
+    │   SAHAYAK CLIENT                   │
+    │                                    │
+    │  [Splash Screen]                  │
+    │   ↓ (2 seconds)                   │
+    │  [Language Selection]              │
+    │   ↓ (tap English/Hindi)            │
+    │  [Onboarding]                      │
+    │   ↓ (swipe through)                │
+    │  [LOGIN SCREEN]                    │
+    │   ↓ (tap "Continue as Guest" or   │
+    │      "Login")                     │
+    │  [HOME DASHBOARD]                 │
+    │   - Search services               │
+    │   - Browse plumbing/electric/etc  │
+    │   - View bookings                 │
+    │   - Check profile                 │
+    └────────────────────────────────────┘
+
+
+TRY THESE IN CLIENT APP:
+  ✓ Tap bottom navigation icons
+  ✓ Click on services (Plumbing, Painting, etc)
+  ✓ Try to create a service request
+  ✓ View worker profiles
+  ✓ Check bookings
+  ✓ Open chat/help
+
+================================================================================
+                         WORKER APP - STEP BY STEP
+================================================================================
+
+⚠️  IMPORTANT: OPEN NEW TERMINAL/POWERSHELL WINDOW
+     Keep the Client app terminal OPEN
+
+STEP 1: Open NEW PowerShell
+
+  Right-click desktop → Open PowerShell here
+
+
+STEP 2: Navigate to Worker App
+
+  Type:
+  cd d:\capstone\worker\frontend
+
+
+STEP 3: Install Dependencies
+
+  Type:
+  npm install
+
+  ⏳ Wait 3-5 minutes...
+
+
+STEP 4: Start Worker App
+
+  Type:
+  npm start
+
+  ✨ You'll see:
+
+    ┌─────────────────────────────────────────┐
+    │  Expo Go Configuration is set up!       │
+    │  Tunnel ready                           │
+    │  Metro bundler started                  │
+    │                                         │
+    │  exp://192.168.0.100:8082              │
+    │  (Note: Port 8082 - different!)        │
+    │                                         │
+    │  [QR CODE SHOWN HERE]                  │
+    └─────────────────────────────────────────┘
+
+
+STEP 5: Open Worker App on Device
+
+  Option A: Scan QR Code
+  ─────────────────────
+  
+    1. On same Android device (keep Client open)
+    2. Open Expo Go → Tap camera
+    3. Scan this NEW QR code
+    4. Worker app opens! 🎉
+    
+    💡 Now you have BOTH apps on your device!
+    
+    
+  Option B: Paste URL
+  ──────────────────
+  
+    1. Copy: exp://192.168.0.100:8082
+    2. Open Expo Go → Paste link
+    3. Switch to Worker app
+
+
+STEP 6: You're Running Worker App! ✅
+
+  You should see:
+  
+    ┌────────────────────────────────────┐
+    │   SAHAYAK WORKER                   │
+    │                                    │
+    │  [Splash Screen]                  │
+    │   ↓                                │
+    │  [Language Selection]              │
+    │   ↓                                │
+    │  [Welcome Screen]                 │
+    │   ↓                                │
+    │  [Worker LOGIN]                   │
+    │   ↓                                │
+    │  [DASHBOARD]                      │
+    │   - Available Jobs                │
+    │   - My Jobs                       │
+    │   - Earnings                      │
+    │   - Profile                       │
+    │   - Settings                      │
+    └────────────────────────────────────┘
+
+
+TRY THESE IN WORKER APP:
+  ✓ Tap "Available Jobs"
+  ✓ View job details
+  ✓ Accept a job
+  ✓ Check earnings
+  ✓ Update profile
+  ✓ Voice assistant
+
+================================================================================
+                         BOTH APPS RUNNING - TEST!
+================================================================================
+
+Now you have BOTH apps on your device!
+
+                  ┌─────────────────────────────┐
+                  │  CLIENT (Plumbing, etc)    │
+                  │  exp://....:8081           │
+                  └─────────────────────────────┘
+                              ↕️ SWITCH
+                  ┌─────────────────────────────┐
+                  │  WORKER (Available Jobs)    │
+                  │  exp://....:8082            │
+                  └─────────────────────────────┘
+
+
+TEST SCENARIOS:
+
+  1. Open Client App
+     ↓
+     Search for "Electrician"
+     ↓
+     See list of available workers
+     ↓
+     
+  2. Switch to Worker App
+     ↓
+     See "Available Jobs" from clients
+     ↓
+     Accept a job
+     ↓
+     
+  3. Switch back to Client
+     ↓
+     See that worker accepted the job
+     ↓
+     
+  Both apps show consistent data!
+  (Note: In real world, backend syncs this)
+
+================================================================================
+                          KEYBOARD SHORTCUTS
+================================================================================
+
+While app is running, press these in terminal:
+
+  r ━━ Reload app (after code changes)
+  d ━━ Open developer menu
+  m ━━ Toggle menu
+  w ━━ Open in web browser
+  a ━━ Open in Android emulator
+  i ━━ Open in iOS simulator
+  q ━━ Exit Expo Go
+
+================================================================================
+                      TROUBLESHOOTING - QUICK FIXES
+================================================================================
+
+PROBLEM: "npm: command not found"
+SOLUTION: Install Node.js from nodejs.org, restart terminal
+
+PROBLEM: "Port already in use"
+SOLUTION: expo start --port 8085
+
+PROBLEM: App is blank screen
+SOLUTION: Press 'r' to reload, or do:
+          npm cache clean --force && npm install
+
+PROBLEM: QR code won't scan
+SOLUTION: Copy URL from terminal → paste in Expo Go instead
+
+PROBLEM: App crashes on load
+SOLUTION: expo prebuild --clean
+
+PROBLEM: "Cannot find module"
+SOLUTION: npm install && expo prebuild --clean
+
+PROBLEM: Emulator connection refused
+SOLUTION: Make sure emulator is running, or use physical device
+
+================================================================================
+                         FEATURES YOU'LL SEE
+================================================================================
+
+CLIENT APP:
+  ✓ Home with service categories
+  ✓ Search for plumbers, painters, electricians
+  ✓ Create service request with date/time
+  ✓ View available workers
+  ✓ Book a worker
+  ✓ Track booking status
+  ✓ Make payment (UI only)
+  ✓ Rate worker
+  ✓ Chat with support
+  ✓ View notifications
+  ✓ Profile management
+
+WORKER APP:
+  ✓ Dashboard with job overview
+  ✓ View available jobs nearby
+  ✓ Accept/reject jobs
+  ✓ Update job status
+  ✓ Chat with customer
+  ✓ View earnings
+  ✓ Rate customer
+  ✓ Update skills/profile
+  ✓ Voice assistant
+  ✓ Settings & preferences
+  ✓ Organization mode (for company workers)
+
+================================================================================
+                         WHAT'S ACTUALLY READY?
+================================================================================
+
+✅ UI/UX Screens   - All created and functional
+✅ Navigation      - Bottom tabs, screens work
+✅ Screen Designs  - Professional UI layouts
+✅ Sample Data     - Dummy data for testing
+✅ Animations      - Smooth transitions
+✅ Icons           - Service icons and markers
+
+❌ NOT READY YET:
+   - Backend API connection (Phase 2)
+   - Real data from server
+   - Actual payments
+   - SMS verification
+   - Voice recognition (ready, not integrated)
+   - Multilingual (UI ready, not translated)
+
+================================================================================
+                         NEXT AFTER TESTING?
+================================================================================
+
+Once both apps are running:
+
+  1. ✓ Apps open successfully
+  2. ✓ Navigate between screens
+  3. ✓ No crashes or errors
+  4. ✓ UI looks good
+  
+  THEN PROCEED TO PHASE 2:
+  - Connect to backend API
+  - Implement real authentication
+  - Add real data flow
+  - See NEXT_STEPS.md
+
+================================================================================
+                         READY? LET'S GO!
+================================================================================
+
+                         COPY & PASTE:
+
+┌─ TERMINAL 1 ──────────────────────────────────────┐
+│ cd d:\capstone\client\frontend                    │
+│ npm install                                        │
+│ npm start                                          │
+└────────────────────────────────────────────────────┘
+
+        Then scan QR code in Expo Go app ↓↓↓
+
+┌─ TERMINAL 2 (NEW) ─────────────────────────────────┐
+│ cd d:\capstone\worker\frontend                    │
+│ npm install                                        │
+│ npm start                                          │
+└────────────────────────────────────────────────────┘
+
+        Then scan NEW QR code in Expo Go app ↓↓↓
+
+        Now you have BOTH apps running! 🎉
+
+================================================================================
+                    For detailed help, see:
+              HOW_TO_RUN_APPS.md and TESTING_GUIDE.md
+================================================================================

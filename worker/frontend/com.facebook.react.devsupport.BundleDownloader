@@ -1,0 +1,4054 @@
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  StatusBar,
+  SafeAreaView,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  Alert,
+  Image,
+} from "react-native";
+
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+
+
+import * as ImagePicker from "expo-image-picker";
+import SplashScreen from "./screen/splashscreen";
+import Dashboard from "./screen/dashboard";
+import Jobs from "./screen/jobnear";
+import Profile from "./screen/profile";
+import WelcomeScreen from "./screen/welcome";
+import SettingsScreen from "./screen/settingscreen";
+import LoginScreen from "./screen/login";
+import ForgotPassScreen from "./screen/forgotpassword";
+import LanguageSelection from "./screen/LanguageSelection";
+import ChatbotScreen from "./screen/ChatbotScreen";
+import WorkerWelcomeScreen from "./screen/WorkerWelcomeScreen";
+import Organization from "./screen/organization";
+import AddWorkerorganization from "./screen/AddWorker";
+import OrganizationLoggin from "./screen/OLogin";
+import OrganizationPerformance from "./screen/Performance";
+import RegisterScreen from "./screen/RegisterScreen";
+
+
+const PURPLE = "#49769F";
+const LIGHT_PURPLE = "#EEF4F8";
+const BG = "#F8FAFC";
+const TEXT = "#111827";
+const MUTED = "#6B7280";
+const GREEN = "#24935D";
+const RED = "#D94C4C";
+const BORDER = "#E0E7ED";
+
+
+const DUMMY_PROFILE =
+  "https://randomuser.me/api/portraits/men/32.jpg";
+
+
+  export default function App() {
+  
+  const [screen, setScreen] = useState("splash");
+  const [language, setLanguage] = useState("English");
+
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("aditya@example.com");
+  const [workType, setWorkType] = useState("Electrician");
+  const [experience, setExperience] = useState("2");
+  const [charge, setCharge] = useState("800");
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [rating, setRating] = useState(0);
+  const [search, setSearch] = useState("");
+  const [profileImage, setProfileImage] = useState(DUMMY_PROFILE);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setScreen("language");
+    }, 1800);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const go = (page) => setScreen(page);
+
+  const pickProfileImage = async () => {
+    const permission =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (!permission.granted) {
+      Alert.alert(
+        "Permission Required",
+        "Please allow gallery permission."
+      );
+      return;
+    }
+
+    const result =
+      await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ["images"],
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.8,
+      });
+
+    if (!result.canceled) {
+      setProfileImage(result.assets[0].uri);
+    }
+  };
+
+  /* ============================================================
+   SPLASH
+============================================================ */
+
+if (screen === "splash") {
+  return (
+    <SplashScreen
+      onFinish={() => go("language")}
+    />
+  );
+}
+
+/* ============================================================
+   LANGUAGE SELECTION
+============================================================ */
+
+if (screen === "language") {
+  return (
+    <LanguageSelection
+      onContinue={() => go("workerWelcome")}
+      onBack={() => go("workerWelcome")}
+    />
+  );
+}
+
+
+/* ============================================================
+   WELCOME SCREEN
+============================================================ */
+
+if (screen === "workerWelcome") {
+  return (
+    <WelcomeScreen
+      onSignIn={() => go("login")}
+      onOrganizationLogin={() => go("organization")}
+      onBack={() => go("language")}
+    />
+  );
+}
+/* ============================================================
+   LOGIN / SIGN IN
+============================================================ */
+
+if (screen === "login") {
+  return (
+    <LoginScreen
+      onLogin={() => go("home")}
+      onRegister={() => go("registration")}
+      onForgotPassword={() => go("forgotPassword")}
+      onBack={() => go("workerWelcome")}
+    />
+  );
+}
+
+/* ============================================================
+   FORGOT PASSWORD
+============================================================ */
+
+if (screen === "forgotPassword") {
+  return (
+    <ForgotPassScreen
+      onBack={() => go("login")}
+      onResetPassword={() => go("login")}
+    />
+  );
+}
+  /* ============================================================
+     REGISTRATION
+  ============================================================ */
+
+  if (screen === "registration") {
+    return (
+      <Screen>
+        <Header
+          title="Create Worker Account"
+          back={() => go("login")}
+        />
+
+        <Progress step={1} />
+
+        <Text style={styles.pageTitle}>
+          Create Worker Account
+        </Text>
+
+        <Text style={styles.pageSubtitle}>
+          Fill in your details to get started
+        </Text>
+
+        <View style={styles.infoBox}>
+          <MaterialCommunityIcons
+            name="information-outline"
+            size={22}
+            color={PURPLE}
+          />
+          <Text style={styles.infoText}>
+            We'll use this information to recommend
+            suitable jobs near you.
+          </Text>
+        </View>
+
+        <Field
+          label="Full Name *"
+          icon="account-outline"
+          placeholder="Enter your full name"
+          value={name}
+          onChangeText={setName}
+        />
+
+        <Field
+          label="Date of Birth"
+          icon="calendar-outline"
+          placeholder="Select date of birth"
+        />
+
+        <Text style={styles.fieldLabel}>Gender</Text>
+
+        <View style={styles.threeButtons}>
+          {["Male", "Female", "Other"].map((item) => (
+            <TouchableOpacity
+              key={item}
+              style={styles.smallChoice}
+            >
+              <Text style={styles.smallChoiceText}>
+                {item}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        <Field
+          label="Type of Work"
+          icon="briefcase-outline"
+          placeholder="Select your type of work"
+          value={workType}
+          onChangeText={setWorkType}
+        />
+
+        <PrimaryButton
+          title="Next"
+          icon="arrow-right"
+          onPress={() => go("registrationDetails")}
+        />
+      </Screen>
+    );
+  }
+/*=============================================================
+organization registration
+==============================================================*/
+if (screen === "organization") {
+  return (
+    <Organization
+      onContinue={() => go("home")}
+      onLogin={() => go("login")}
+      onBack={() => go("workerWelcome")}
+    />
+  );
+}
+  /* ============================================================
+   ADD WORKER, LOGIN, PERFORMANCE
+  ============================================================ */
+
+if (screen === "addWorker") {
+  return <AddWorker go={go} />;
+}
+
+if (screen === "Ologin") {
+  return <Login go={go} />;
+}
+
+if (screen === "performance") {
+  return <Performance go={go} />;
+}
+  /* ============================================================
+     REGISTRATION DETAILS
+  ============================================================ */
+if (screen === "registration") {
+  return (
+    <Screen>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.registrationContent}
+      >
+
+        <Header
+          title="Create Worker Account"
+          back={() => go("login")}
+        />
+
+        <Progress step={1} />
+
+        <Text style={styles.pageTitle}>
+          Create Worker Account
+        </Text>
+
+        <Text style={styles.pageSubtitle}>
+          Fill in your details to get started
+        </Text>
+
+        {/* INFO BOX */}
+        <View style={styles.infoBox}>
+          <MaterialCommunityIcons
+            name="information-outline"
+            size={25}
+            color={PURPLE}
+          />
+
+          <Text style={styles.infoText}>
+            We'll use this information to recommend suitable jobs near you.
+          </Text>
+        </View>
+
+        {/* FULL NAME */}
+        <Text style={styles.fieldLabel}>
+          Full Name *
+        </Text>
+
+        <View style={styles.fieldWithMic}>
+          <View style={{ flex: 1 }}>
+            <Field
+              icon="account-outline"
+              placeholder="Enter your full name"
+              value={name}
+              onChangeText={setName}
+            />
+          </View>
+
+          <VoiceMic
+            onPress={() =>
+              Alert.alert(
+                "Voice Input",
+                "Microphone UI is ready. Voice input will be connected with backend later."
+              )
+            }
+          />
+        </View>
+
+        {/* DOB */}
+        <Text style={styles.fieldLabel}>
+          Date of Birth
+        </Text>
+
+        <View style={styles.fieldWithMic}>
+          <View style={{ flex: 1 }}>
+            <Field
+              icon="calendar-outline"
+              placeholder="Select date of birth"
+              value={dob}
+              onChangeText={setDob}
+            />
+          </View>
+
+          <VoiceMic
+            onPress={() =>
+              Alert.alert(
+                "Voice Input",
+                "Voice input will be connected with backend later."
+              )
+            }
+          />
+        </View>
+
+        {/* GENDER */}
+        <Text style={styles.fieldLabel}>
+          Gender
+        </Text>
+
+        <View style={styles.threeButtons}>
+          {["Male", "Female", "Other"].map((item) => {
+            const selected = gender === item;
+
+            return (
+              <TouchableOpacity
+                key={item}
+                activeOpacity={0.8}
+                style={[
+                  styles.smallChoice,
+                  selected && styles.smallChoiceSelected,
+                ]}
+                onPress={() => setGender(item)}
+              >
+                <Text
+                  style={[
+                    styles.smallChoiceText,
+                    selected && styles.smallChoiceTextSelected,
+                  ]}
+                >
+                  {item}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+
+        {/* TYPE OF WORK */}
+        <Text style={styles.fieldLabel}>
+          Type of Work *
+        </Text>
+
+        <View style={styles.fieldWithMic}>
+          <View style={{ flex: 1 }}>
+            <Field
+              icon="briefcase-outline"
+              placeholder="Select your type of work"
+              value={workType}
+              onChangeText={setWorkType}
+            />
+          </View>
+
+          <VoiceMic
+            onPress={() =>
+              Alert.alert(
+                "Voice Input",
+                "Voice input will be connected with backend later."
+              )
+            }
+          />
+        </View>
+
+        {/* PHONE */}
+        <Text style={styles.fieldLabel}>
+          Phone Number *
+        </Text>
+
+        <View style={styles.fieldWithMic}>
+          <View style={{ flex: 1 }}>
+            <Field
+              icon="phone-outline"
+              placeholder="Enter phone number"
+              keyboardType="phone-pad"
+              value={phone}
+              onChangeText={setPhone}
+            />
+          </View>
+
+          <VoiceMic
+            onPress={() =>
+              Alert.alert(
+                "Voice Input",
+                "Voice input will be connected with backend later."
+              )
+            }
+          />
+        </View>
+
+        {/* AADHAAR */}
+        <Text style={styles.fieldLabel}>
+          Aadhaar Number *
+        </Text>
+
+        <Field
+          icon="card-account-details-outline"
+          placeholder="Enter 12-digit Aadhaar number"
+          keyboardType="number-pad"
+          value={aadhaar}
+          onChangeText={setAadhaar}
+        />
+
+        {/* NEXT */}
+        <PrimaryButton
+          title="Next"
+          icon="arrow-right"
+          onPress={() => {
+            if (!name.trim()) {
+              Alert.alert("Required", "Please enter your full name.");
+              return;
+            }
+
+            if (!phone.trim()) {
+              Alert.alert("Required", "Please enter your phone number.");
+              return;
+            }
+
+            if (!aadhaar.trim()) {
+              Alert.alert("Required", "Please enter your Aadhaar number.");
+              return;
+            }
+
+            go("registrationDetails");
+          }}
+        />
+
+      </ScrollView>
+    </Screen>
+  );
+}
+/*============================================================
+registration details*/
+if (screen === "registrationDetails") {
+  return (
+    <Screen>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.registrationContent}
+      >
+
+        <Header
+          title="Worker Registration"
+          back={() => go("registration")}
+        />
+
+        <Progress step={2} />
+
+        <Text style={styles.pageTitle}>
+          Worker Registration
+        </Text>
+
+        <Text style={styles.pageSubtitle}>
+          Almost there! Add your details
+        </Text>
+
+        {/* AADHAAR */}
+        <Text style={styles.fieldLabel}>
+          Aadhaar Number *
+        </Text>
+
+        <Field
+          icon="card-account-details-outline"
+          placeholder="Enter 12 digit Aadhaar number"
+          keyboardType="number-pad"
+          value={aadhaar}
+          onChangeText={setAadhaar}
+        />
+
+        {/* UPLOAD */}
+        <Text style={styles.fieldLabel}>
+          Upload ID Proof (Aadhaar / Other)
+        </Text>
+
+        <View style={styles.uploadBox}>
+
+          <MaterialCommunityIcons
+            name="cloud-upload-outline"
+            size={48}
+            color={PURPLE}
+          />
+
+          <Text style={styles.uploadTitle}>
+            Upload clear Aadhaar photo
+          </Text>
+
+          <View style={styles.uploadRow}>
+
+            <TouchableOpacity
+              style={styles.uploadButton}
+              activeOpacity={0.8}
+              onPress={() => {
+                Alert.alert(
+                  "Camera",
+                  "Camera UI is ready. Backend/image picker can be connected later."
+                );
+              }}
+            >
+              <MaterialCommunityIcons
+                name="camera-outline"
+                size={24}
+                color={PURPLE}
+              />
+
+              <Text style={styles.uploadButtonText}>
+                Open Camera
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.uploadButton}
+              activeOpacity={0.8}
+              onPress={() => {
+                Alert.alert(
+                  "Gallery",
+                  "Gallery UI is ready. Backend/image picker can be connected later."
+                );
+              }}
+            >
+              <MaterialCommunityIcons
+                name="image-outline"
+                size={24}
+                color={PURPLE}
+              />
+
+              <Text style={styles.uploadButtonText}>
+                Pick Gallery
+              </Text>
+            </TouchableOpacity>
+
+          </View>
+        </View>
+
+        {/* ADDRESS */}
+        <Text style={styles.fieldLabel}>
+          Address *
+        </Text>
+
+        <View style={styles.fieldWithMic}>
+          <View style={{ flex: 1 }}>
+            <Field
+              icon="map-marker-outline"
+              placeholder="Enter full address"
+              value={address}
+              onChangeText={setAddress}
+            />
+          </View>
+
+          <VoiceMic
+            onPress={() =>
+              Alert.alert(
+                "Voice Input",
+                "Voice input will be connected with backend later."
+              )
+            }
+          />
+        </View>
+
+        {/* CITY + STATE */}
+        <View style={styles.twoFields}>
+
+          <View style={{ flex: 1 }}>
+            <Text style={styles.fieldLabel}>
+              City *
+            </Text>
+
+            <View style={styles.fieldWithMicSmall}>
+              <View style={{ flex: 1 }}>
+                <Field
+                  icon="city-outline"
+                  placeholder="Enter city"
+                  value={city}
+                  onChangeText={setCity}
+                />
+              </View>
+
+              <VoiceMic
+                onPress={() =>
+                  Alert.alert(
+                    "Voice Input",
+                    "Voice input will be connected with backend later."
+                  )
+                }
+              />
+            </View>
+          </View>
+
+          <View style={{ width: 12 }} />
+
+          <View style={{ flex: 1 }}>
+            <Text style={styles.fieldLabel}>
+              State *
+            </Text>
+
+            <View style={styles.fieldWithMicSmall}>
+              <View style={{ flex: 1 }}>
+                <Field
+                  icon="map-outline"
+                  placeholder="Enter state"
+                  value={state}
+                  onChangeText={setState}
+                />
+              </View>
+
+              <VoiceMic
+                onPress={() =>
+                  Alert.alert(
+                    "Voice Input",
+                    "Voice input will be connected with backend later."
+                  )
+                }
+              />
+            </View>
+          </View>
+
+        </View>
+
+        {/* PIN CODE */}
+        <View style={styles.twoFields}>
+
+          <View style={{ flex: 1 }}>
+            <Text style={styles.fieldLabel}>
+              Pin Code *
+            </Text>
+
+            <Field
+              icon="map-marker-radius-outline"
+              placeholder="Enter 6-digit PIN"
+              keyboardType="number-pad"
+              value={pinCode}
+              onChangeText={setPinCode}
+            />
+          </View>
+
+          <View style={{ width: 12 }} />
+
+          <View style={{ flex: 1 }}>
+            <Text style={styles.fieldLabel}>
+              Country
+            </Text>
+
+            <Field
+              icon="earth"
+              placeholder="India"
+              value="India"
+            />
+          </View>
+
+        </View>
+
+        {/* EXPERIENCE */}
+        <Text style={styles.fieldLabel}>
+          Experience (Years) *
+        </Text>
+
+        <Field
+          icon="briefcase-clock-outline"
+          placeholder="e.g. 5"
+          keyboardType="numeric"
+          value={experience}
+          onChangeText={setExperience}
+        />
+
+        {/* MIN VISIT CHARGE */}
+        <Text style={styles.fieldLabel}>
+          Min. Visit Charge *
+        </Text>
+
+        <View style={styles.fieldWithMic}>
+          <View style={{ flex: 1 }}>
+            <Field
+              icon="currency-inr"
+              placeholder="e.g. 200"
+              keyboardType="numeric"
+              value={minCharge}
+              onChangeText={setMinCharge}
+            />
+          </View>
+
+          <VoiceMic
+            onPress={() =>
+              Alert.alert(
+                "Voice Input",
+                "Voice input will be connected with backend later."
+              )
+            }
+          />
+        </View>
+
+        {/* EMAIL */}
+        <Text style={styles.fieldLabel}>
+          Email Address *
+        </Text>
+
+        <View style={styles.fieldWithMic}>
+          <View style={{ flex: 1 }}>
+            <Field
+              icon="email-outline"
+              placeholder="email@example.com"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              value={email}
+              onChangeText={setEmail}
+            />
+          </View>
+
+          <VoiceMic
+            onPress={() =>
+              Alert.alert(
+                "Voice Input",
+                "Voice input will be connected with backend later."
+              )
+            }
+          />
+        </View>
+
+        {/* PASSWORD */}
+        <Text style={styles.fieldLabel}>
+          Password *
+        </Text>
+
+        <Field
+          icon="lock-outline"
+          placeholder="Min 8 chars"
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+        />
+
+        {/* CONFIRM PASSWORD */}
+        <Text style={styles.fieldLabel}>
+          Confirm Password *
+        </Text>
+
+        <Field
+          icon="lock-check-outline"
+          placeholder="Confirm password"
+          secureTextEntry
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+        />
+
+        {/* COMPLETE */}
+        <PrimaryButton
+          title="Complete Registration"
+          icon="check"
+          onPress={() => {
+
+            if (!aadhaar.trim()) {
+              Alert.alert(
+                "Required",
+                "Please enter your Aadhaar number."
+              );
+              return;
+            }
+
+            if (!address.trim()) {
+              Alert.alert(
+                "Required",
+                "Please enter your address."
+              );
+              return;
+            }
+
+            if (!city.trim()) {
+              Alert.alert(
+                "Required",
+                "Please enter your city."
+              );
+              return;
+            }
+
+            if (!state.trim()) {
+              Alert.alert(
+                "Required",
+                "Please enter your state."
+              );
+              return;
+            }
+
+            if (!email.trim()) {
+              Alert.alert(
+                "Required",
+                "Please enter your email address."
+              );
+              return;
+            }
+
+            if (!password.trim()) {
+              Alert.alert(
+                "Required",
+                "Please create a password."
+              );
+              return;
+            }
+
+            if (password.length < 8) {
+              Alert.alert(
+                "Invalid Password",
+                "Password must contain at least 8 characters."
+              );
+              return;
+            }
+
+            if (password !== confirmPassword) {
+              Alert.alert(
+                "Password Error",
+                "Passwords do not match."
+              );
+              return;
+            }
+
+            Alert.alert(
+              "Registration Complete",
+              "Your worker account has been created.",
+              [
+                {
+                  text: "Continue",
+                  onPress: () => go("workerVerification"),
+                },
+              ]
+            );
+          }}
+        />
+
+      </ScrollView>
+    </Screen>
+  );
+}
+
+  /* ============================================================
+     VERIFICATION
+  ============================================================ */
+
+  if (screen === "verification") {
+  return (
+    <Screen>
+      <Header
+        title="Worker Registration"
+        back={() => go("registrationDetails")}
+      />
+
+      <Progress step={3} />
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.registrationContent}
+      >
+        <Text style={styles.pageTitle}>
+          Worker Registration
+        </Text>
+
+        <Text style={styles.pageSubtitle}>
+          Set your preferences
+        </Text>
+
+        {/* WORK AREA */}
+        <Text style={styles.fieldLabel}>
+          Work Area / City
+        </Text>
+
+        <View style={styles.voiceFieldRow}>
+          <View style={styles.voiceInputWrapper}>
+            <Field
+              icon="map-marker-outline"
+              placeholder="Select city"
+              value={city || "Pune"}
+              onChangeText={setCity}
+            />
+          </View>
+
+          <VoiceButton field="city" />
+        </View>
+
+        {/* MIN CHARGE */}
+        <Text style={styles.fieldLabel}>
+          Min. Work Charge
+        </Text>
+
+        <View style={styles.voiceFieldRow}>
+          <View style={styles.voiceInputWrapper}>
+            <Field
+              icon="currency-inr"
+              placeholder="₹ 800"
+              value={visitCharge ? `₹ ${visitCharge}` : "₹ 800"}
+              onChangeText={(text) =>
+                setVisitCharge(
+                  text.replace(/\D/g, "")
+                )
+              }
+              keyboardType="numeric"
+            />
+          </View>
+
+          <VoiceButton field="visitCharge" />
+        </View>
+
+        {/* EMAIL */}
+        <Text style={styles.fieldLabel}>
+          Email Address
+        </Text>
+
+        <View style={styles.voiceFieldRow}>
+          <View style={styles.voiceInputWrapper}>
+            <Field
+              icon="email-outline"
+              placeholder="Enter email address"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+          </View>
+
+          <VoiceButton field="email" />
+        </View>
+
+        {/* PASSWORD */}
+        <Field
+          label="Password"
+          icon="lock-outline"
+          placeholder="Create password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+
+        {/* SKILLS */}
+        <Text style={styles.fieldLabel}>
+          Skills / Services
+        </Text>
+
+        <View style={styles.voiceFieldRow}>
+          <View style={styles.voiceInputWrapper}>
+            <Field
+              icon="tools"
+              placeholder="Select your skills"
+              value={skills}
+              onChangeText={setSkills}
+            />
+          </View>
+
+          <VoiceButton field="skills" />
+        </View>
+
+        {/* COMPLETE */}
+        <PrimaryButton
+          title="Complete Registration"
+          icon="check"
+          onPress={() => {
+            Alert.alert(
+              "Registration Complete",
+              "Your worker account has been created.",
+              [
+                {
+                  text: "Continue",
+                  onPress: () => {
+                    
+                    go("workerVerification");
+                  },
+                },
+              ]
+            );
+          }}
+        />
+      </ScrollView>
+    </Screen>
+  );
+}
+  
+  /* ============================================================
+   DASHBOARD
+   Dashboard UI is handled by Dashboard.js
+============================================================ */
+if (
+  screen === "home" ||
+  screen === "requests" ||
+  screen === "voiceassistant" ||
+  screen === "voiceAssistant" ||
+  screen === "calendar" ||
+  screen === "earnings" ||
+  screen === "settings" ||
+  screen === "help"
+) {
+  return (
+    <Dashboard
+      screen={screen}
+      go={go}
+      search={search}
+      setSearch={setSearch}
+      setSelectedJob={setSelectedJob}
+    />
+  );
+}
+/*=================================
+chatbot
+====================================*/
+if (screen === "chatbot") {
+  return (
+    <ChatbotScreen
+      onBack={() => go("home")}
+    />
+  );
+}
+
+  /* ============================================================
+     JOBS NEAR YOU
+  ============================================================ */
+
+  if (screen === "jobs") {
+  return (
+    <Jobs
+      go={go}
+      setSelectedJob={setSelectedJob}
+    />
+  );
+}
+
+  /* ============================================================
+     JOB DETAIL
+  ============================================================ */
+
+  if (screen === "jobDetail") {
+    return (
+      <Screen>
+        <Header
+          title="Job Details"
+          back={() => go("jobs")}
+        />
+
+        <View style={styles.jobDetailIcon}>
+          <MaterialCommunityIcons
+            name={
+              selectedJob === "plumber"
+                ? "water-pump"
+                : selectedJob === "carpenter"
+                ? "hammer-wrench"
+                : selectedJob === "cleaning"
+                ? "broom"
+                : "flash"
+            }
+            size={35}
+            color={PURPLE}
+          />
+        </View>
+
+        <Text style={styles.detailTitle}>
+          {selectedJob === "plumber"
+            ? "Plumber Required"
+            : selectedJob === "carpenter"
+            ? "Carpenter Helper"
+            : selectedJob === "cleaning"
+            ? "House Cleaning"
+            : "Electrician Required"}
+        </Text>
+
+        <Text style={styles.detailRate}>
+          ₹800 / Day
+        </Text>
+
+        <View style={styles.detailInfoRow}>
+          <Info icon="map-marker-outline" text="Kothrud, Pune" />
+          <Info icon="clock-outline" text="Today • 9:00 AM" />
+        </View>
+
+        <DetailSection title="Customer">
+          <Text style={styles.boldText}>
+            Rahul Sharma
+          </Text>
+          <Text style={styles.mutedText}>
+            ⭐ 4.7 Rating
+          </Text>
+        </DetailSection>
+
+        <DetailSection title="Job Description">
+          <Text style={styles.bodyText}>
+            Need electrician for indoor house wiring
+            and basic electrical work.
+          </Text>
+        </DetailSection>
+
+        <DetailSection title="Requirements">
+          <Text style={styles.bodyText}>• 2+ years experience</Text>
+          <Text style={styles.bodyText}>• Own tools preferred</Text>
+          <Text style={styles.bodyText}>• Basic safety gear</Text>
+        </DetailSection>
+
+        <PrimaryButton
+          title="Apply for Job"
+          icon="briefcase-check-outline"
+          onPress={() => go("jobAccepted")}
+        />
+
+        <TouchableOpacity style={styles.callButton}>
+          <MaterialCommunityIcons
+            name="phone"
+            size={20}
+            color={PURPLE}
+          />
+          <Text style={styles.callText}>
+            Call Customer
+          </Text>
+        </TouchableOpacity>
+      </Screen>
+    );
+  }
+
+  /* ============================================================
+     JOB ACCEPTED
+  ============================================================ */
+
+  if (screen === "jobAccepted") {
+    return (
+      <Screen>
+        <Header
+          title="Job Accepted"
+          back={() => go("jobs")}
+        />
+
+        <StatusBanner
+          icon="check-circle"
+          title="Job Accepted"
+          green
+        />
+
+        <DetailSection title="Customer Address">
+          <Text style={styles.bodyText}>
+            123, MG Road, Pune, Maharashtra
+          </Text>
+
+          <TouchableOpacity style={styles.mapButton}>
+            <MaterialCommunityIcons
+              name="map-marker"
+              size={19}
+              color={PURPLE}
+            />
+            <Text style={styles.purpleText}>
+              Open Map
+            </Text>
+          </TouchableOpacity>
+        </DetailSection>
+
+        <DetailSection title="Customer">
+          <Text style={styles.boldText}>
+            Rahul Sharma
+          </Text>
+          <Text style={styles.mutedText}>
+            +91 9876543210
+          </Text>
+        </DetailSection>
+
+        <DetailSection title="Work to do">
+          <Text style={styles.bodyText}>
+            • Electrical fitting
+          </Text>
+          <Text style={styles.bodyText}>
+            • Switch installation
+          </Text>
+          <Text style={styles.bodyText}>
+            • Wiring
+          </Text>
+        </DetailSection>
+
+        <PrimaryButton
+          title="Start Work"
+          icon="play"
+          onPress={() => go("workProgress")}
+        />
+      </Screen>
+    );
+  }
+
+  /* ============================================================
+     WORK IN PROGRESS
+  ============================================================ */
+
+  if (screen === "workProgress") {
+    return (
+      <Screen>
+        <Header
+          title="Work In Progress"
+          back={() => go("jobs")}
+        />
+
+        <StatusBanner
+          icon="progress-clock"
+          title="Job In Progress"
+        />
+
+        <DetailSection title="Customer Address">
+          <Text style={styles.bodyText}>
+            123, MG Road, Pune, Maharashtra
+          </Text>
+
+          <TouchableOpacity style={styles.mapButton}>
+            <MaterialCommunityIcons
+              name="map-marker"
+              size={19}
+              color={PURPLE}
+            />
+            <Text style={styles.purpleText}>
+              Open Map
+            </Text>
+          </TouchableOpacity>
+        </DetailSection>
+
+        <DetailSection title="Time Started">
+          <Text style={styles.bodyText}>
+            16 May 2024 • 09:05 AM
+          </Text>
+        </DetailSection>
+
+        <DetailSection title="Work Duration">
+          <Text style={styles.bodyText}>
+            ⏱ 02:30:45
+          </Text>
+        </DetailSection>
+
+        <TouchableOpacity
+          style={styles.completeButton}
+          onPress={() => go("jobCompleted")}
+        >
+          <Text style={styles.completeText}>
+            Complete Work
+          </Text>
+        </TouchableOpacity>
+      </Screen>
+    );
+  }
+
+  /* ============================================================
+     JOB COMPLETED
+  ============================================================ */
+
+  if (screen === "jobCompleted") {
+    return (
+      <Screen>
+        <Header
+          title="Job Completed"
+          back={() => go("home")}
+        />
+
+        <StatusBanner
+          icon="check-circle"
+          title="Job Completed"
+          green
+        />
+
+        <DetailSection title="Customer">
+          <Text style={styles.boldText}>
+            Rahul Sharma
+          </Text>
+          <Text style={styles.mutedText}>
+            ⭐ 4.7 Rating
+          </Text>
+        </DetailSection>
+
+        <DetailSection title="Work Summary">
+          <Text style={styles.bodyText}>
+            Electrical fitting and wiring work
+            completed successfully.
+          </Text>
+        </DetailSection>
+
+        <DetailSection title="Earnings">
+          <Text style={styles.earningGreen}>
+            ₹800
+          </Text>
+        </DetailSection>
+
+        <PrimaryButton
+          title="View Earnings"
+          icon="cash-multiple"
+          onPress={() => go("earnings")}
+        />
+
+        <TouchableOpacity
+          style={styles.outlineButton}
+          onPress={() => go("rateCustomer")}
+        >
+          <Text style={styles.outlineText}>
+            Rate Customer
+          </Text>
+        </TouchableOpacity>
+      </Screen>
+    );
+  }
+
+
+
+
+  /* ============================================================
+     RATE CUSTOMER
+  ============================================================ */
+
+  if (screen === "rateCustomer") {
+    return (
+      <Screen>
+        <Header
+          title="Rate Customer"
+          back={() => go("jobCompleted")}
+        />
+
+        <View style={styles.rateCenter}>
+          <Text style={styles.rateTitle}>
+            Rate your work experience!
+          </Text>
+
+          <View style={styles.starsRow}>
+            {[1, 2, 3, 4, 5].map((star) => (
+              <TouchableOpacity
+                key={star}
+                onPress={() => setRating(star)}
+              >
+                <MaterialCommunityIcons
+                  name={
+                    star <= rating
+                      ? "star"
+                      : "star-outline"
+                  }
+                  size={42}
+                  color={
+                    star <= rating
+                      ? "#F2B51D"
+                      : "#C7C5CE"
+                  }
+                />
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          <Text style={styles.greatText}>
+            {rating === 5
+              ? "Great!"
+              : rating === 4
+              ? "Good!"
+              : rating > 0
+              ? "Thank you!"
+              : "Tap a star to rate"}
+          </Text>
+        </View>
+
+        <Text style={styles.fieldLabel}>
+          Write a review (optional)
+        </Text>
+
+        <TextInput
+          style={styles.reviewBox}
+          placeholder="Nice guy and friendly..."
+          placeholderTextColor="#999"
+          multiline
+        />
+
+        <PrimaryButton
+          title="Submit Review"
+          icon="check"
+          onPress={() => {
+            Alert.alert(
+              "Thank You",
+              "Your review has been submitted.",
+              [{ text: "Done", onPress: () => go("earnings") }]
+            );
+          }}
+        />
+
+        <TouchableOpacity
+          onPress={() => go("earnings")}
+        >
+          <Text style={styles.skipText}>Skip</Text>
+        </TouchableOpacity>
+      </Screen>
+    );
+  }
+
+  /* ============================================================
+     EARNINGS
+  ============================================================ */
+
+  if (screen === "earnings") {
+    return (
+      <MainLayout
+        active="earnings"
+        go={go}
+        title="Earnings"
+      >
+        <View style={styles.earningHero}>
+          <Text style={styles.smallWhite}>
+            Today's Earnings
+          </Text>
+          <Text style={styles.bigWhite}>
+            ₹1,200
+          </Text>
+          <MaterialCommunityIcons
+            name="wallet"
+            size={32}
+            color="#fff"
+            style={styles.walletHeroIcon}
+          />
+        </View>
+
+        <Text style={styles.sectionHeading}>
+          Summary
+        </Text>
+
+        <View style={styles.summaryCard}>
+          <SummaryRow label="Total Jobs" value="₹1,200" />
+          <SummaryRow label="Total Hours" value="8:00" />
+          <SummaryRow label="This Month" value="₹4,500" />
+        </View>
+
+        <Text style={styles.sectionHeading}>
+          Recent Payments
+        </Text>
+
+        <Payment
+          icon="flash"
+          title="Electrician Job"
+          amount="+₹800"
+        />
+
+        <Payment
+          icon="broom"
+          title="House Cleaning"
+          amount="+₹600"
+        />
+
+        <Payment
+          icon="hammer-wrench"
+          title="Construction Work"
+          amount="+₹500"
+        />
+      </MainLayout>
+    );
+  }
+
+  /* ============================================================
+     MY PROFILE
+  ============================================================ */
+
+  if (screen === "profile") {
+  return (
+    <Profile
+      go={go}
+    />
+  );
+}
+
+  /* ============================================================
+     EDIT PROFILE
+  ============================================================ */
+
+  if (screen === "editProfile") {
+    return (
+      <Screen>
+        <Header
+          title="Edit Profile"
+          back={() => go("profile")}
+        />
+
+        <View style={styles.editPhotoWrap}>
+          <Image
+            source={{ uri: profileImage }}
+            style={styles.editPhoto}
+          />
+
+          <TouchableOpacity
+            style={styles.photoEdit}
+            onPress={pickProfileImage}
+          >
+            <MaterialCommunityIcons
+              name="camera"
+              size={18}
+              color="#fff"
+            />
+          </TouchableOpacity>
+        </View>
+
+        <Field
+          label="Full Name"
+          icon="account-outline"
+          value={name}
+          onChangeText={setName}
+        />
+
+        <Field
+          label="Type of Work"
+          icon="briefcase-outline"
+          value={workType}
+          onChangeText={setWorkType}
+        />
+
+        <Field
+          label="Experience (Years)"
+          icon="briefcase-clock-outline"
+          value={experience}
+          onChangeText={setExperience}
+          keyboardType="number-pad"
+        />
+
+        <Field
+          label="Minimum Visit Charge"
+          icon="currency-inr"
+          value={`₹${charge}`}
+          onChangeText={setCharge}
+          keyboardType="number-pad"
+        />
+
+        <PrimaryButton
+          title="Save Changes"
+          icon="content-save-outline"
+          onPress={() => {
+            Alert.alert("Saved", "Profile updated successfully.");
+            go("profile");
+          }}
+        />
+      </Screen>
+    );
+  }
+
+  /* ============================================================
+     MY JOBS
+  ============================================================ */
+
+  if (screen === "myJobs") {
+    return (
+      <Screen>
+        <Header
+          title="My Jobs"
+          back={() => go("profile")}
+        />
+
+        <View style={styles.tabs}>
+          <Tab title="Applied" />
+          <Tab title="Ongoing" active />
+          <Tab title="Completed" />
+        </View>
+
+        <MyJob
+          title="Electrician Required"
+          location="Kothrud, Pune"
+          time="Today • 9:00 AM"
+          status="Ongoing"
+          color="#E8F5EE"
+          textColor={GREEN}
+        />
+
+        <MyJob
+          title="House Cleaning"
+          location="Baner, Pune"
+          time="10 May • 11:00 AM"
+          status="Completed"
+          color="#E8F5EE"
+          textColor={GREEN}
+        />
+
+        <MyJob
+          title="Switch Installation"
+          location="Sus, Pune"
+          time="9 May • 11:00 AM"
+          status="Completed"
+          color="#E8F5EE"
+          textColor={GREEN}
+        />
+      </Screen>
+    );
+  }
+  /*=================================================
+  Organization tools
+  ==================================================*/
+if (screen === "addWorker") {
+  return (
+    <AddWorker
+      go={go}
+    />
+  );
+}
+
+if (screen === "login") {
+  return (
+    <Login
+      go={go}
+    />
+  );
+}
+
+if (screen === "performance") {
+  return (
+    <Performance
+      go={go}
+    />
+  );
+}
+
+  /* ============================================================
+     NOTIFICATIONS
+  ============================================================ */
+
+  if (screen === "notifications") {
+    return (
+      <Screen>
+        <Header
+          title="Notifications"
+          back={() => go("home")}
+        />
+
+        <Notification
+          icon="briefcase-check"
+          title="New job available near you"
+          time="2 min ago"
+        />
+
+        <Notification
+          icon="check-circle"
+          title="Your job has been accepted"
+          time="10 min ago"
+        />
+
+        <Notification
+          icon="cash"
+          title="Payment of ₹800 received"
+          time="1 hour ago"
+        />
+
+        <Notification
+          icon="calendar"
+          title="Reminder: Job at 10:00 AM"
+          time="2 hours ago"
+        />
+
+        <Notification
+          icon="account-edit"
+          title="Update your profile"
+          time="Yesterday"
+        />
+      </Screen>
+    );
+  }
+
+  /* ============================================================
+     CHAT
+  ============================================================ */
+
+  if (screen === "chat") {
+    return (
+      <Screen>
+        <Header
+          title="Chat / Messages"
+          back={() => go("home")}
+        />
+
+        <View style={styles.chatHeader}>
+          <Image
+            source={{
+              uri: DUMMY_PROFILE,
+            }}
+            style={styles.chatPhoto}
+          />
+
+          <View>
+            <Text style={styles.boldText}>
+              Rahul Sharma
+            </Text>
+            <Text style={styles.online}>
+              Online
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.messageCustomer}>
+          <Text>
+            Hi, are you coming for the job?
+          </Text>
+          <Text style={styles.messageTime}>
+            09:05 AM
+          </Text>
+        </View>
+
+        <View style={styles.messageWorker}>
+          <Text style={{ color: "#fff" }}>
+            Yes, I am on the way 👍
+          </Text>
+          <Text style={styles.messageTimeWhite}>
+            09:10 AM
+          </Text>
+        </View>
+
+        <View style={styles.chatInput}>
+          <TextInput
+            placeholder="Type a message..."
+            style={{ flex: 1 }}
+          />
+          <MaterialCommunityIcons
+            name="send"
+            size={25}
+            color={PURPLE}
+          />
+        </View>
+      </Screen>
+    );
+  }
+
+  /* ============================================================
+     WALLET
+  ============================================================ */
+
+  if (screen === "wallet") {
+    return (
+      <Screen>
+        <Header
+          title="Wallet"
+          back={() => go("home")}
+        />
+
+        <View style={styles.walletCard}>
+          <Text style={styles.walletLabel}>
+            Wallet Balance
+          </Text>
+
+          <Text style={styles.walletAmount}>
+            ₹2,450
+          </Text>
+
+          <TouchableOpacity
+            style={styles.addMoney}
+          >
+            <Text style={styles.addMoneyText}>
+              Add Money
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <Text style={styles.sectionHeading}>
+          Recent Transactions
+        </Text>
+
+        <Transaction
+          title="Job Payment"
+          amount="+₹800"
+        />
+
+        <Transaction
+          title="Job Payment"
+          amount="+₹700"
+        />
+
+        <Transaction
+          title="Withdrawal"
+          amount="-₹500"
+          red
+        />
+      </Screen>
+    );
+  }
+
+  /* ============================================================
+     WITHDRAW
+  ============================================================ */
+
+  if (screen === "withdraw") {
+    return (
+      <Screen>
+        <Header
+          title="Withdraw Money"
+          back={() => go("wallet")}
+        />
+
+        <View style={styles.availableBalance}>
+          <Text style={styles.mutedText}>
+            Available Balance
+          </Text>
+          <Text style={styles.availableAmount}>
+            ₹2,450
+          </Text>
+        </View>
+
+        <Field
+          label="Enter Amount"
+          icon="currency-inr"
+          placeholder="₹ 1000"
+          keyboardType="number-pad"
+        />
+
+        <Field
+          label="UPI ID"
+          icon="bank-outline"
+          placeholder="aditya@upi"
+        />
+
+        <PrimaryButton
+          title="Withdraw"
+          icon="cash-fast"
+          onPress={() =>
+            Alert.alert(
+              "Withdrawal Requested",
+              "Your withdrawal request has been submitted."
+            )
+          }
+        />
+      </Screen>
+    );
+  }
+ 
+
+  /* ============================================================
+     DOCUMENTS
+  ============================================================ */
+
+  if (screen === "documents") {
+    return (
+      <Screen>
+        <Header
+          title="Documents"
+          back={() => go("profile")}
+        />
+
+        <Document
+          icon="card-account-details"
+          title="Aadhaar Card"
+          status="Verified"
+        />
+
+        <Document
+          icon="card-account-details-outline"
+          title="PAN Card"
+          status="Verified"
+        />
+
+        <Document
+          icon="account-box-outline"
+          title="Profile Photo"
+          status="Verified"
+        />
+
+        <Document
+          icon="certificate-outline"
+          title="Work Proof / Certificate"
+          status="Not Uploaded"
+        />
+
+        <PrimaryButton
+          title="Upload Document"
+          icon="cloud-upload-outline"
+          onPress={pickProfileImage}
+        />
+      </Screen>
+    );
+  }
+  /*====================================================
+  AddWorker, Login, Performance 
+===========================================================*/
+if (screen === "addworker") {
+  return <AddWorkerorganization go={go} />;
+}
+
+if (screen === "performance") {
+  return <OrganizationPerformance go={go} />;
+}
+
+if (screen === "organizationLogin") {
+  return <OrganizationLoggin go={go} />;
+}
+  /* ============================================================
+     SETTINGS
+  ============================================================ */
+
+ if (screen === "settings") {
+  return (
+    <SettingsScreen
+      onBack={() => go("profile")}
+
+      onLogout={() => {
+        Alert.alert(
+          "Logout",
+          "Are you sure you want to logout?",
+          [
+            {
+              text: "Cancel",
+              style: "cancel",
+            },
+            {
+              text: "Logout",
+              style: "destructive",
+              onPress: () => go("login"),
+            },
+          ]
+        );
+      }}
+
+      onChangePassword={() => {
+        Alert.alert(
+          "Change Password",
+          "Password change screen will be connected here."
+        );
+      }}
+
+      onLanguage={(language) => {
+        console.log("Selected language:", language);
+      }}
+
+      onTheme={() => {
+        Alert.alert(
+          "Theme",
+          "Theme settings will be connected here."
+        );
+      }}
+
+      onChangeMobile={() => {
+        Alert.alert(
+          "Change Mobile Number",
+          "Mobile number update will be connected here."
+        );
+      }}
+
+      onPrivacyPolicy={() => {
+        Alert.alert(
+          "Privacy Policy",
+          "Privacy Policy screen will open here."
+        );
+      }}
+
+      onTerms={() => {
+        Alert.alert(
+          "Terms & Conditions",
+          "Terms & Conditions screen will open here."
+        );
+      }}
+
+      onContactUs={() => {
+        Alert.alert(
+          "Contact Us",
+          "Email: support@sahayak.com\nPhone: +91 9876543210"
+        );
+      }}
+
+      theme="light"
+    />
+  );
+}
+  /* ============================================================
+     HELP
+  ============================================================ */
+
+  if (screen === "help") {
+    return (
+      <Screen>
+        <Header
+          title="Help & Support"
+          back={() => go("profile")}
+        />
+
+        <Text style={styles.helpTitle}>
+          How can we help you?
+        </Text>
+
+        <ProfileItem
+          icon="frequently-asked-questions"
+          title="FAQs"
+        />
+
+        <ProfileItem
+          icon="headset"
+          title="Contact Support"
+        />
+
+        <ProfileItem
+          icon="ticket-outline"
+          title="Raise a Ticket"
+        />
+
+        <ProfileItem
+          icon="phone"
+          title="Call Us"
+        />
+
+        <Text style={styles.version}>
+          App Version                 1.0.0
+        </Text>
+      </Screen>
+    );
+  }
+
+  /* ============================================================
+     SEARCH / FILTER
+  ============================================================ */
+
+  if (screen === "search") {
+    return (
+      <Screen>
+        <Header
+          title="Search / Filter Jobs"
+          back={() => go("jobs")}
+        />
+
+        <View style={styles.searchBar}>
+          <MaterialCommunityIcons
+            name="magnify"
+            size={23}
+            color={MUTED}
+          />
+
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search jobs..."
+            value={search}
+            onChangeText={setSearch}
+          />
+        </View>
+
+        <Text style={styles.filterHeading}>
+          Filter
+        </Text>
+
+        <FilterRow
+          title="Type"
+          value="Electrician"
+        />
+
+        <FilterRow
+          title="Job Type"
+          value="All"
+        />
+
+        <FilterRow
+          title="Price Range"
+          value="₹0 - ₹2000"
+        />
+
+        <PrimaryButton
+          title="Apply Filter"
+          icon="filter"
+          onPress={() => go("jobs")}
+        />
+      </Screen>
+    );
+  }
+
+  return null;
+}
+
+/* ================================================================
+   REUSABLE COMPONENTS
+================================================================ */
+
+function Screen({ children }) {
+  return (
+    <SafeAreaView style={styles.safe}>
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor={BG}
+      />
+
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={
+          Platform.OS === "ios" ? "padding" : undefined
+        }
+      >
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.screenContent}
+          keyboardShouldPersistTaps="handled"
+        >
+          {children}
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+  );
+}
+
+function Header({ title, back }) {
+  return (
+    <View style={styles.header}>
+      <TouchableOpacity
+        style={styles.backCircle}
+        onPress={back}
+      >
+        <MaterialCommunityIcons
+          name="arrow-left"
+          size={22}
+          color={TEXT}
+        />
+      </TouchableOpacity>
+
+      <Text style={styles.headerTitle}>
+        {title}
+      </Text>
+
+      <View style={{ width: 42 }} />
+    </View>
+  );
+}
+
+function MainLayout({
+  children,
+  active,
+  go,
+  title,
+}) {
+  return (
+    <SafeAreaView style={styles.safe}>
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor={BG}
+      />
+
+      <View style={{ flex: 1 }}>
+        {title && (
+          <View style={styles.mainHeader}>
+            <Text style={styles.mainHeaderTitle}>
+              {title}
+            </Text>
+
+            <TouchableOpacity
+              onPress={() => go("notifications")}
+            >
+              <MaterialCommunityIcons
+                name="bell-outline"
+                size={25}
+                color={TEXT}
+              />
+            </TouchableOpacity>
+          </View>
+        )}
+
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            padding: 18,
+            paddingBottom: 105,
+          }}
+        >
+          {children}
+        </ScrollView>
+
+        <BottomNav
+          active={active}
+          go={go}
+        />
+      </View>
+    </SafeAreaView>
+  );
+}
+
+function BottomNav({ active, go }) {
+  return (
+    <View style={styles.bottomNav}>
+      <NavItem
+        icon="home"
+        title="Home"
+        active={active === "home"}
+        onPress={() => go("home")}
+      />
+
+      <NavItem
+        icon="briefcase-outline"
+        title="Jobs"
+        active={active === "jobs"}
+        onPress={() => go("jobs")}
+      />
+
+      <NavItem
+        icon="cash-multiple"
+        title="Earnings"
+        active={active === "earnings"}
+        onPress={() => go("earnings")}
+      />
+
+      <NavItem
+        icon="account-outline"
+        title="Profile"
+        active={active === "profile"}
+        onPress={() => go("profile")}
+      />
+    </View>
+  );
+}
+
+function NavItem({
+  icon,
+  title,
+  active,
+  onPress,
+}) {
+  return (
+    <TouchableOpacity
+      style={styles.navItem}
+      onPress={onPress}
+    >
+      <MaterialCommunityIcons
+        name={icon}
+        size={23}
+        color={active ? PURPLE : MUTED}
+      />
+
+      <Text
+        style={[
+          styles.navText,
+          active && { color: PURPLE },
+        ]}
+      >
+        {title}
+      </Text>
+    </TouchableOpacity>
+  );
+}
+
+function PrimaryButton({
+  title,
+  icon,
+  onPress,
+}) {
+  return (
+    <TouchableOpacity
+      style={styles.primaryButton}
+      onPress={onPress}
+      activeOpacity={0.85}
+    >
+      <Text style={styles.primaryText}>
+        {title}
+      </Text>
+
+      {icon && (
+        <MaterialCommunityIcons
+          name={icon}
+          size={21}
+          color="#fff"
+        />
+      )}
+    </TouchableOpacity>
+  );
+}
+
+function Field({
+  label,
+  icon,
+  placeholder,
+  value,
+  onChangeText,
+  keyboardType,
+  secureTextEntry,
+}) {
+  return (
+    <View style={{ marginBottom: 15 }}>
+      <Text style={styles.fieldLabel}>
+        {label}
+      </Text>
+
+      <View style={styles.inputBox}>
+        <MaterialCommunityIcons
+          name={icon}
+          size={21}
+          color={PURPLE}
+        />
+
+        <TextInput
+          style={styles.fieldInput}
+          placeholder={placeholder}
+          placeholderTextColor="#A3A1AA"
+          value={value}
+          onChangeText={onChangeText}
+          keyboardType={keyboardType}
+          secureTextEntry={secureTextEntry}
+        />
+      </View>
+    </View>
+  );
+}
+
+function Progress({ step }) {
+  return (
+    <View style={styles.progressRow}>
+      {[1, 2, 3].map((n) => (
+        <React.Fragment key={n}>
+          <View
+            style={[
+              styles.progressCircle,
+              n <= step && styles.progressActive,
+            ]}
+          >
+            <Text
+              style={[
+                styles.progressNumber,
+                n <= step && { color: "#fff" },
+              ]}
+            >
+              {n}
+            </Text>
+          </View>
+
+          {n !== 3 && (
+            <View
+              style={[
+                styles.progressLine,
+                n < step && styles.progressLineActive,
+              ]}
+            />
+          )}
+        </React.Fragment>
+      ))}
+    </View>
+  );
+}
+
+function Category({ icon, title }) {
+  return (
+    <TouchableOpacity style={styles.category}>
+      <View style={styles.categoryIcon}>
+        <MaterialCommunityIcons
+          name={icon}
+          size={24}
+          color={PURPLE}
+        />
+      </View>
+
+      <Text style={styles.categoryText}>
+        {title}
+      </Text>
+    </TouchableOpacity>
+  );
+}
+
+function SectionTitle({
+  title,
+  action,
+  onPress,
+}) {
+  return (
+    <View style={styles.sectionTitleRow}>
+      <Text style={styles.sectionHeading}>
+        {title}
+      </Text>
+
+      {action && (
+        <TouchableOpacity onPress={onPress}>
+          <Text style={styles.purpleText}>
+            {action}
+          </Text>
+        </TouchableOpacity>
+      )}
+    </View>
+  );
+}
+
+function JobCard({
+  icon,
+  title,
+  location,
+  rate,
+  time,
+  tag,
+  onPress,
+}) {
+  return (
+    <TouchableOpacity
+      style={styles.jobCard}
+      onPress={onPress}
+      activeOpacity={0.85}
+    >
+      <View style={styles.jobTop}>
+        <View style={styles.jobIcon}>
+          <MaterialCommunityIcons
+            name={icon}
+            size={27}
+            color={PURPLE}
+          />
+        </View>
+
+        <View style={{ flex: 1, marginLeft: 12 }}>
+          <Text style={styles.jobTitle}>
+            {title}
+          </Text>
+
+          <Text style={styles.jobLocation}>
+            📍 {location}
+          </Text>
+        </View>
+
+        <View style={styles.tag}>
+          <Text style={styles.tagText}>
+            {tag}
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.jobBottom}>
+        <View>
+          <Text style={styles.jobRate}>
+            {rate}
+          </Text>
+
+          <Text style={styles.jobTime}>
+            {time}
+          </Text>
+        </View>
+
+        <TouchableOpacity
+          style={styles.viewButton}
+          onPress={onPress}
+        >
+          <Text style={styles.viewButtonText}>
+            View Job
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableOpacity>
+  );
+}
+
+function DetailSection({ title, children }) {
+  return (
+    <View style={styles.detailSection}>
+      <Text style={styles.detailSectionTitle}>
+        {title}
+      </Text>
+      {children}
+    </View>
+  );
+}
+
+function Info({ icon, text }) {
+  return (
+    <View style={styles.infoItem}>
+      <MaterialCommunityIcons
+        name={icon}
+        size={18}
+        color={PURPLE}
+      />
+      <Text style={styles.infoItemText}>
+        {text}
+      </Text>
+    </View>
+  );
+}
+
+function StatusBanner({
+  icon,
+  title,
+  green,
+}) {
+  return (
+    <View
+      style={[
+        styles.statusBanner,
+        {
+          backgroundColor: green
+            ? "#EAF8F0"
+            : "#EEF3FF",
+        },
+      ]}
+    >
+      <MaterialCommunityIcons
+        name={icon}
+        size={21}
+        color={green ? GREEN : PURPLE}
+      />
+
+      <Text
+        style={{
+          marginLeft: 8,
+          fontWeight: "700",
+          color: green ? GREEN : PURPLE,
+        }}
+      >
+        {title}
+      </Text>
+    </View>
+  );
+}
+
+function SummaryRow({ label, value }) {
+  return (
+    <View style={styles.summaryRow}>
+      <Text style={styles.mutedText}>{label}</Text>
+      <Text style={styles.boldText}>{value}</Text>
+    </View>
+  );
+}
+
+function Payment({ icon, title, amount }) {
+  return (
+    <View style={styles.paymentRow}>
+      <View style={styles.paymentIcon}>
+        <MaterialCommunityIcons
+          name={icon}
+          size={22}
+          color={PURPLE}
+        />
+      </View>
+
+      <Text style={styles.paymentTitle}>
+        {title}
+      </Text>
+
+      <Text style={styles.paymentAmount}>
+        {amount}
+      </Text>
+    </View>
+  );
+}
+
+function ProfileItem({
+  icon,
+  title,
+  onPress,
+}) {
+  return (
+    <TouchableOpacity
+      style={styles.profileItem}
+      onPress={onPress}
+    >
+      <MaterialCommunityIcons
+        name={icon}
+        size={23}
+        color={PURPLE}
+      />
+
+      <Text style={styles.profileItemText}>
+        {title}
+      </Text>
+
+      <MaterialCommunityIcons
+        name="chevron-right"
+        size={22}
+        color="#9A98A3"
+      />
+    </TouchableOpacity>
+  );
+}
+
+function Tab({ title, active }) {
+  return (
+    <View
+      style={[
+        styles.tab,
+        active && styles.tabActive,
+      ]}
+    >
+      <Text
+        style={[
+          styles.tabText,
+          active && { color: PURPLE },
+        ]}
+      >
+        {title}
+      </Text>
+    </View>
+  );
+}
+
+function MyJob({
+  title,
+  location,
+  time,
+  status,
+  color,
+  textColor,
+}) {
+  return (
+    <View style={styles.myJobCard}>
+      <View style={{ flex: 1 }}>
+        <Text style={styles.jobTitle}>
+          {title}
+        </Text>
+
+        <Text style={styles.jobLocation}>
+          📍 {location}
+        </Text>
+
+        <Text style={styles.jobTime}>
+          ◷ {time}
+        </Text>
+      </View>
+
+      <View
+        style={[
+          styles.statusPill,
+          { backgroundColor: color },
+        ]}
+      >
+        <Text style={{ color: textColor, fontSize: 11 }}>
+          {status}
+        </Text>
+      </View>
+    </View>
+  );
+}
+
+function Notification({
+  icon,
+  title,
+  time,
+}) {
+  return (
+    <View style={styles.notification}>
+      <View style={styles.notificationIcon}>
+        <MaterialCommunityIcons
+          name={icon}
+          size={21}
+          color={PURPLE}
+        />
+      </View>
+
+      <View style={{ flex: 1 }}>
+        <Text style={styles.notificationTitle}>
+          {title}
+        </Text>
+
+        <Text style={styles.notificationTime}>
+          {time}
+        </Text>
+      </View>
+    </View>
+  );
+}
+
+function Transaction({
+  title,
+  amount,
+  red,
+}) {
+  return (
+    <View style={styles.transaction}>
+      <View style={styles.transactionIcon}>
+        <MaterialCommunityIcons
+          name={
+            red
+              ? "arrow-bottom-left"
+              : "arrow-top-right"
+          }
+          size={21}
+          color={red ? RED : GREEN}
+        />
+      </View>
+
+      <Text style={styles.transactionTitle}>
+        {title}
+      </Text>
+
+      <Text
+        style={{
+          fontWeight: "800",
+          color: red ? RED : GREEN,
+        }}
+      >
+        {amount}
+      </Text>
+    </View>
+  );
+}
+
+function Document({
+  icon,
+  title,
+  status,
+}) {
+  const verified = status === "Verified";
+
+  return (
+    <View style={styles.document}>
+      <MaterialCommunityIcons
+        name={icon}
+        size={25}
+        color={PURPLE}
+      />
+
+      <Text style={styles.documentTitle}>
+        {title}
+      </Text>
+
+      <Text
+        style={{
+          color: verified ? GREEN : "#A17B00",
+          fontWeight: "700",
+          fontSize: 12,
+        }}
+      >
+        {status}
+      </Text>
+    </View>
+  );
+}
+
+function SettingItem({
+  icon,
+  title,
+  value,
+  toggle,
+}) {
+  return (
+    <View style={styles.settingItem}>
+      <MaterialCommunityIcons
+        name={icon}
+        size={23}
+        color={PURPLE}
+      />
+
+      <Text style={styles.settingTitle}>
+        {title}
+      </Text>
+
+      {toggle ? (
+        <View style={styles.fakeToggle}>
+          <View style={styles.toggleDot} />
+        </View>
+      ) : (
+        <>
+          <Text style={styles.settingValue}>
+            {value}
+          </Text>
+
+          <MaterialCommunityIcons
+            name="chevron-right"
+            size={21}
+            color="#999"
+          />
+        </>
+      )}
+    </View>
+  );
+}
+
+function FilterRow({ title, value }) {
+  return (
+    <TouchableOpacity style={styles.filterRow}>
+      <Text style={styles.filterTitle}>
+        {title}
+      </Text>
+
+      <View style={styles.filterRight}>
+        <Text style={styles.filterValue}>
+          {value}
+        </Text>
+
+        <MaterialCommunityIcons
+          name="chevron-down"
+          size={20}
+          color="#888"
+        />
+      </View>
+    </TouchableOpacity>
+  );
+}
+
+
+/* ================================================================
+   STYLES
+================================================================ */
+
+const styles = StyleSheet.create({
+  safe: {
+    flex: 1,
+    backgroundColor: BG,
+  },
+  
+  
+
+  screenContent: {
+    padding: 18,
+    paddingBottom: 35,
+  },
+
+  
+
+  header: {
+    height: 52,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 15,
+  },
+
+  backCircle: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: BORDER,
+  },
+
+  headerTitle: {
+    fontSize: 17,
+    fontWeight: "800",
+    color: TEXT,
+  },
+
+  centerIllustration: {
+    alignItems: "center",
+    marginTop: 10,
+  },
+
+  bigIconCircle: {
+    width: 112,
+    height: 112,
+    borderRadius: 56,
+    backgroundColor: "#EEE8FF",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  pageTitle: {
+    fontSize: 23,
+    fontWeight: "900",
+    color: TEXT,
+    textAlign: "center",
+    marginTop: 20,
+  },
+
+  pageSubtitle: {
+    textAlign: "center",
+    color: MUTED,
+    marginTop: 6,
+    marginBottom: 20,
+  },
+
+  languageCard: {
+    minHeight: 70,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: BORDER,
+    backgroundColor: "#fff",
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 15,
+    marginBottom: 12,
+  },
+
+  languageActive: {
+    backgroundColor: PURPLE,
+    borderColor: PURPLE,
+  },
+
+  languageName: {
+    fontWeight: "800",
+    color: TEXT,
+    fontSize: 15,
+  },
+
+  languageSub: {
+    color: MUTED,
+    fontSize: 12,
+    marginTop: 3,
+  },
+
+  radio: {
+    width: 21,
+    height: 21,
+    borderRadius: 11,
+    borderWidth: 2,
+    borderColor: "#A7A3B0",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  radioActive: {
+    borderColor: "#fff",
+  },
+
+  radioDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: "#fff",
+  },
+
+  primaryButton: {
+    height: 52,
+    borderRadius: 10,
+    backgroundColor: PURPLE,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 10,
+    marginTop: 16,
+    marginBottom: 10,
+  },
+
+  primaryText: {
+    color: "#fff",
+    fontSize: 15,
+    fontWeight: "800",
+  },
+
+  bottomHint: {
+    textAlign: "center",
+    color: MUTED,
+    fontSize: 12,
+    marginTop: 14,
+  },
+
+  loginLogo: {
+    alignSelf: "center",
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: "#EEE8FF",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  loginTitle: {
+    fontSize: 27,
+    fontWeight: "900",
+    color: TEXT,
+    textAlign: "center",
+    marginTop: 14,
+  },
+
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    padding: 17,
+    borderWidth: 1,
+    borderColor: BORDER,
+  },
+
+  fieldLabel: {
+    fontSize: 13,
+    color: TEXT,
+    fontWeight: "700",
+    marginBottom: 7,
+  },
+
+  inputBox: {
+    minHeight: 48,
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: BORDER,
+    borderRadius: 9,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 13,
+  },
+
+  fieldInput: {
+    flex: 1,
+    marginLeft: 9,
+    color: TEXT,
+    fontSize: 14,
+  },
+
+  forgot: {
+    alignItems: "flex-end",
+    marginTop: 10,
+  },
+
+  purpleText: {
+    color: PURPLE,
+    fontWeight: "700",
+    fontSize: 13,
+  },
+
+  orRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 20,
+  },
+
+  line: {
+    flex: 1,
+    height: 1,
+    backgroundColor: BORDER,
+  },
+
+  orText: {
+    marginHorizontal: 12,
+    color: MUTED,
+  },
+
+  outlineButton: {
+    height: 50,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: PURPLE,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 9,
+    marginBottom: 12,
+  },
+
+  outlineText: {
+    color: PURPLE,
+    fontWeight: "800",
+  },
+
+  infoBox: {
+    backgroundColor: "#EEF3FF",
+    borderRadius: 12,
+    padding: 13,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 18,
+  },
+
+  infoText: {
+    flex: 1,
+    marginLeft: 9,
+    color: "#315B9E",
+    fontSize: 12,
+    lineHeight: 18,
+  },
+
+  progressRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20,
+  },
+
+  progressCircle: {
+    width: 31,
+    height: 31,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: "#C7C3D1",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  progressActive: {
+    backgroundColor: PURPLE,
+    borderColor: PURPLE,
+  },
+
+  progressNumber: {
+    color: MUTED,
+    fontWeight: "800",
+  },
+
+  progressLine: {
+    width: 55,
+    height: 2,
+    backgroundColor: "#D9D6E0",
+  },
+
+  progressLineActive: {
+    backgroundColor: PURPLE,
+  },
+
+  threeButtons: {
+    flexDirection: "row",
+    gap: 8,
+    marginBottom: 15,
+  },
+
+  smallChoice: {
+    flex: 1,
+    height: 43,
+    borderRadius: 9,
+    borderWidth: 1,
+    borderColor: BORDER,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  smallChoiceText: {
+    color: TEXT,
+    fontWeight: "600",
+  },
+
+  uploadBox: {
+    backgroundColor: "#F4F7FF",
+    borderWidth: 1,
+    borderColor: "#C8D4F2",
+    borderStyle: "dashed",
+    borderRadius: 12,
+    padding: 18,
+    alignItems: "center",
+    marginBottom: 15,
+  },
+
+  uploadTitle: {
+    marginTop: 7,
+    fontWeight: "700",
+    color: TEXT,
+  },
+
+  uploadRow: {
+    flexDirection: "row",
+    gap: 10,
+    marginTop: 15,
+  },
+
+  uploadButton: {
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: BORDER,
+    paddingHorizontal: 13,
+    paddingVertical: 10,
+    borderRadius: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+  },
+
+  twoFields: {
+    flexDirection: "row",
+    gap: 10,
+  },
+
+  mainHeader: {
+    paddingHorizontal: 18,
+    paddingTop: 8,
+    paddingBottom: 8,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
+  mainHeaderTitle: {
+    fontSize: 20,
+    fontWeight: "900",
+    color: TEXT,
+  },
+
+  greeting: {
+    fontSize: 23,
+    fontWeight: "900",
+    color: TEXT,
+  },
+
+  location: {
+    color: MUTED,
+    fontSize: 12,
+    marginTop: 4,
+  },
+
+  searchBar: {
+    height: 48,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: BORDER,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingLeft: 13,
+    marginTop: 16,
+    marginBottom: 20,
+  },
+
+  searchPlaceholder: {
+    flex: 1,
+    color: "#9996A4",
+    marginLeft: 8,
+  },
+
+  searchInput: {
+    flex: 1,
+    marginLeft: 8,
+    color: TEXT,
+  },
+
+  searchPurple: {
+    width: 48,
+    height: 48,
+    borderRadius: 10,
+    backgroundColor: PURPLE,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  sectionTitleRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 10,
+    marginTop: 3,
+  },
+
+  sectionHeading: {
+    fontSize: 17,
+    fontWeight: "900",
+    color: TEXT,
+  },
+
+  categoryGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    marginBottom: 18,
+  },
+
+  category: {
+    width: "23%",
+    alignItems: "center",
+    marginBottom: 15,
+  },
+
+  categoryIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: "#F0EBFF",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  categoryText: {
+    fontSize: 10,
+    color: TEXT,
+    marginTop: 6,
+    textAlign: "center",
+  },
+
+  jobCard: {
+    backgroundColor: "#fff",
+    borderRadius: 13,
+    borderWidth: 1,
+    borderColor: BORDER,
+    padding: 13,
+    marginBottom: 11,
+  },
+
+  jobTop: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  jobIcon: {
+    width: 49,
+    height: 49,
+    borderRadius: 12,
+    backgroundColor: "#F1EDFF",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  jobTitle: {
+    fontSize: 14,
+    fontWeight: "800",
+    color: TEXT,
+  },
+
+  jobLocation: {
+    color: MUTED,
+    fontSize: 11,
+    marginTop: 4,
+  },
+
+  tag: {
+    backgroundColor: "#FFF3D5",
+    paddingHorizontal: 7,
+    paddingVertical: 4,
+    borderRadius: 5,
+  },
+
+  tagText: {
+    color: "#9A7000",
+    fontSize: 9,
+    fontWeight: "800",
+  },
+
+  jobBottom: {
+    marginTop: 11,
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: "#F0EEF3",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
+  jobRate: {
+    color: GREEN,
+    fontWeight: "900",
+    fontSize: 14,
+  },
+
+  jobTime: {
+    color: MUTED,
+    fontSize: 10,
+    marginTop: 3,
+  },
+
+  viewButton: {
+    borderWidth: 1,
+    borderColor: PURPLE,
+    borderRadius: 7,
+    paddingHorizontal: 10,
+    paddingVertical: 7,
+  },
+
+  viewButtonText: {
+    color: PURPLE,
+    fontSize: 10,
+    fontWeight: "800",
+  },
+
+  bottomNav: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 68,
+    backgroundColor: "#fff",
+    borderTopWidth: 1,
+    borderTopColor: BORDER,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
+
+  navItem: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: "25%",
+  },
+
+  navText: {
+    fontSize: 10,
+    color: MUTED,
+    marginTop: 3,
+  },
+
+  locationRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
+  jobDetailIcon: {
+    width: 68,
+    height: 68,
+    borderRadius: 16,
+    backgroundColor: "#EEE9FF",
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+  },
+
+  detailTitle: {
+    textAlign: "center",
+    color: TEXT,
+    fontSize: 21,
+    fontWeight: "900",
+    marginTop: 12,
+  },
+
+  detailRate: {
+    textAlign: "center",
+    color: GREEN,
+    fontWeight: "900",
+    fontSize: 17,
+    marginTop: 5,
+  },
+
+  detailInfoRow: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginVertical: 17,
+  },
+
+  infoItem: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  infoItemText: {
+    marginLeft: 5,
+    color: MUTED,
+    fontSize: 11,
+  },
+
+  detailSection: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: BORDER,
+    padding: 14,
+    marginBottom: 12,
+  },
+
+  detailSectionTitle: {
+    fontWeight: "900",
+    color: TEXT,
+    marginBottom: 8,
+  },
+
+  boldText: {
+    color: TEXT,
+    fontWeight: "800",
+    fontSize: 13,
+  },
+
+  mutedText: {
+    color: MUTED,
+    fontSize: 12,
+    marginTop: 3,
+  },
+
+  bodyText: {
+    color: "#55525F",
+    fontSize: 12,
+    lineHeight: 19,
+    marginBottom: 2,
+  },
+
+  callButton: {
+    height: 48,
+    borderWidth: 1,
+    borderColor: PURPLE,
+    borderRadius: 9,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 8,
+  },
+
+  callText: {
+    color: PURPLE,
+    fontWeight: "800",
+  },
+
+  statusBanner: {
+    borderRadius: 10,
+    padding: 13,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 15,
+  },
+
+  mapButton: {
+    marginTop: 10,
+    borderWidth: 1,
+    borderColor: PURPLE,
+    borderRadius: 7,
+    paddingVertical: 8,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 6,
+  },
+
+  completeButton: {
+    height: 50,
+    borderWidth: 1,
+    borderColor: RED,
+    borderRadius: 9,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  completeText: {
+    color: RED,
+    fontWeight: "800",
+  },
+
+  earningGreen: {
+    color: GREEN,
+    fontSize: 23,
+    fontWeight: "900",
+  },
+
+  rateCenter: {
+    alignItems: "center",
+    marginTop: 25,
+    marginBottom: 25,
+  },
+
+  rateTitle: {
+    fontSize: 16,
+    fontWeight: "800",
+    color: TEXT,
+  },
+
+  starsRow: {
+    flexDirection: "row",
+    marginTop: 15,
+    gap: 6,
+  },
+
+  greatText: {
+    color: MUTED,
+    marginTop: 8,
+    fontWeight: "700",
+  },
+
+  reviewBox: {
+    minHeight: 110,
+    borderWidth: 1,
+    borderColor: BORDER,
+    borderRadius: 10,
+    backgroundColor: "#fff",
+    padding: 12,
+    textAlignVertical: "top",
+  },
+
+  skipText: {
+    color: PURPLE,
+    textAlign: "center",
+    fontWeight: "700",
+    marginTop: 10,
+  },
+
+  earningHero: {
+    backgroundColor: PURPLE,
+    borderRadius: 15,
+    padding: 18,
+    marginBottom: 20,
+    position: "relative",
+  },
+
+  smallWhite: {
+    color: "#E8E1FF",
+    fontSize: 12,
+  },
+
+  bigWhite: {
+    color: "#fff",
+    fontSize: 30,
+    fontWeight: "900",
+    marginTop: 4,
+  },
+
+  walletHeroIcon: {
+    position: "absolute",
+    right: 18,
+    top: 25,
+  },
+
+  summaryCard: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 15,
+    borderWidth: 1,
+    borderColor: BORDER,
+    marginBottom: 18,
+  },
+
+  summaryRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 9,
+    borderBottomWidth: 1,
+    borderBottomColor: "#F1EFF4",
+  },
+
+  paymentRow: {
+    backgroundColor: "#fff",
+    borderRadius: 11,
+    borderWidth: 1,
+    borderColor: BORDER,
+    padding: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 9,
+  },
+
+  paymentIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#F0EBFF",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  paymentTitle: {
+    flex: 1,
+    marginLeft: 10,
+    color: TEXT,
+    fontWeight: "700",
+  },
+
+  paymentAmount: {
+    color: GREEN,
+    fontWeight: "900",
+  },
+
+  profileHeader: {
+    backgroundColor: "#fff",
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: BORDER,
+    padding: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 15,
+  },
+
+  profilePhoto: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+  },
+
+  profileName: {
+    fontSize: 18,
+    fontWeight: "900",
+    color: TEXT,
+  },
+
+  profileWork: {
+    color: MUTED,
+    marginTop: 3,
+  },
+
+  profileRating: {
+    marginTop: 4,
+    color: "#A17100",
+    fontSize: 12,
+  },
+
+  profileItem: {
+    backgroundColor: "#fff",
+    borderRadius: 11,
+    borderWidth: 1,
+    borderColor: BORDER,
+    minHeight: 55,
+    paddingHorizontal: 14,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 9,
+  },
+
+  profileItemText: {
+    flex: 1,
+    marginLeft: 12,
+    color: TEXT,
+    fontWeight: "700",
+    fontSize: 13,
+  },
+
+  logoutRow: {
+    minHeight: 55,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 14,
+    marginTop: 8,
+  },
+
+  logoutText: {
+    marginLeft: 12,
+    color: RED,
+    fontWeight: "800",
+  },
+
+  editPhotoWrap: {
+    alignSelf: "center",
+    position: "relative",
+    marginVertical: 12,
+  },
+
+  editPhoto: {
+    width: 95,
+    height: 95,
+    borderRadius: 48,
+  },
+
+  photoEdit: {
+    position: "absolute",
+    right: 0,
+    bottom: 0,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: PURPLE,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  tabs: {
+    flexDirection: "row",
+    backgroundColor: "#EEEAF7",
+    borderRadius: 10,
+    padding: 4,
+    marginBottom: 15,
+  },
+
+  tab: {
+    flex: 1,
+    paddingVertical: 9,
+    alignItems: "center",
+    borderRadius: 8,
+  },
+
+  tabActive: {
+    backgroundColor: "#fff",
+  },
+
+  tabText: {
+    color: MUTED,
+    fontSize: 11,
+    fontWeight: "700",
+  },
+
+  myJobCard: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: BORDER,
+    padding: 14,
+    marginBottom: 10,
+    flexDirection: "row",
+  },
+
+  statusPill: {
+    alignSelf: "flex-start",
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+    borderRadius: 6,
+  },
+
+  notification: {
+    backgroundColor: "#fff",
+    borderRadius: 11,
+    borderWidth: 1,
+    borderColor: BORDER,
+    padding: 13,
+    flexDirection: "row",
+    marginBottom: 9,
+  },
+
+  notificationIcon: {
+    width: 43,
+    height: 43,
+    borderRadius: 22,
+    backgroundColor: "#F0EBFF",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 10,
+  },
+
+  notificationTitle: {
+    color: TEXT,
+    fontWeight: "700",
+    fontSize: 12,
+  },
+
+  notificationTime: {
+    color: MUTED,
+    fontSize: 10,
+    marginTop: 5,
+  },
+
+  chatHeader: {
+    backgroundColor: "#fff",
+    padding: 12,
+    borderRadius: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 25,
+  },
+
+  chatPhoto: {
+    width: 45,
+    height: 45,
+    borderRadius: 23,
+    marginRight: 10,
+  },
+
+  online: {
+    color: GREEN,
+    fontSize: 11,
+    marginTop: 2,
+  },
+
+  messageCustomer: {
+    alignSelf: "flex-start",
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    borderTopLeftRadius: 3,
+    padding: 12,
+    maxWidth: "78%",
+    marginBottom: 15,
+  },
+
+  messageWorker: {
+    alignSelf: "flex-end",
+    backgroundColor: PURPLE,
+    borderRadius: 12,
+    borderTopRightRadius: 3,
+    padding: 12,
+    maxWidth: "78%",
+    marginBottom: 20,
+  },
+
+  messageTime: {
+    fontSize: 9,
+    color: MUTED,
+    marginTop: 4,
+  },
+
+  messageTimeWhite: {
+    fontSize: 9,
+    color: "#DCD3FF",
+    marginTop: 4,
+  },
+
+  chatInput: {
+    position: "absolute",
+    left: 18,
+    right: 18,
+    bottom: 15,
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: BORDER,
+    borderRadius: 25,
+    height: 48,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 15,
+  },
+
+  walletCard: {
+    backgroundColor: PURPLE,
+    borderRadius: 15,
+    padding: 20,
+    marginTop: 10,
+    position: "relative",
+  },
+
+  walletLabel: {
+    color: "#DED6FF",
+    fontSize: 12,
+  },
+
+  walletAmount: {
+    color: "#fff",
+    fontSize: 29,
+    fontWeight: "900",
+    marginTop: 6,
+  },
+
+  addMoney: {
+    position: "absolute",
+    right: 15,
+    top: 17,
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    paddingHorizontal: 11,
+    paddingVertical: 8,
+  },
+
+  addMoneyText: {
+    color: PURPLE,
+    fontWeight: "800",
+    fontSize: 11,
+  },
+
+  transaction: {
+    backgroundColor: "#fff",
+    borderRadius: 11,
+    borderWidth: 1,
+    borderColor: BORDER,
+    padding: 13,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 9,
+  },
+
+  transactionIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#F0EBFF",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  transactionTitle: {
+    flex: 1,
+    marginLeft: 10,
+    fontWeight: "700",
+    color: TEXT,
+  },
+
+  availableBalance: {
+    backgroundColor: "#EAF8F0",
+    padding: 17,
+    borderRadius: 12,
+    marginBottom: 20,
+  },
+
+  availableAmount: {
+    color: GREEN,
+    fontSize: 25,
+    fontWeight: "900",
+    marginTop: 4,
+  },
+
+  document: {
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: BORDER,
+    borderRadius: 11,
+    minHeight: 58,
+    padding: 13,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 9,
+  },
+
+  documentTitle: {
+    flex: 1,
+    marginLeft: 11,
+    color: TEXT,
+    fontWeight: "700",
+  },
+
+  settingItem: {
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: BORDER,
+    borderRadius: 11,
+    minHeight: 58,
+    paddingHorizontal: 14,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 9,
+  },
+
+  settingTitle: {
+    flex: 1,
+    marginLeft: 11,
+    color: TEXT,
+    fontWeight: "700",
+  },
+
+  settingValue: {
+    color: MUTED,
+    fontSize: 11,
+    marginRight: 6,
+  },
+
+  fakeToggle: {
+    width: 42,
+    height: 23,
+    borderRadius: 12,
+    backgroundColor: PURPLE,
+    padding: 3,
+    alignItems: "flex-end",
+    justifyContent: "center",
+  },
+
+  toggleDot: {
+    width: 17,
+    height: 17,
+    borderRadius: 9,
+    backgroundColor: "#fff",
+  },
+
+  helpTitle: {
+    fontSize: 18,
+    fontWeight: "900",
+    color: TEXT,
+    marginBottom: 15,
+  },
+
+  version: {
+    color: MUTED,
+    marginTop: 20,
+    fontSize: 12,
+  },
+
+  filterHeading: {
+    fontSize: 17,
+    fontWeight: "900",
+    color: TEXT,
+    marginBottom: 10,
+  },
+
+  filterRow: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: BORDER,
+    minHeight: 55,
+    paddingHorizontal: 14,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 9,
+  },
+
+  filterTitle: {
+    flex: 1,
+    color: TEXT,
+    fontWeight: "700",
+  },
+
+  filterRight: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+
+  filterValue: {
+    color: MUTED,
+    fontSize: 12,
+  },
+});
